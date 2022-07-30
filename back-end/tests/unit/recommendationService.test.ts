@@ -38,16 +38,49 @@ describe("INSERT recomendation", () => {
 
 describe("UPVOTE", () => {
     it("sendind a id number, should call two repositories", async () => {
-        
+
         jest.spyOn(recommendationRepository, "find").mockImplementationOnce((): any => {
             return true
         })
 
-        jest.spyOn(recommendationRepository, "updateScore").mockImplementationOnce(():any =>{
+        jest.spyOn(recommendationRepository, "updateScore").mockImplementationOnce((): any => {
         })
 
         await recommendationService.upvote(1);
         expect(recommendationRepository.find).toBeCalled();
         expect(recommendationRepository.updateScore).toBeCalled();
+    })
+})
+
+describe("DOWNVOTE", () => {
+    it("Should call update score, but not remove", async () => {
+        jest.spyOn(recommendationRepository, "updateScore").mockImplementationOnce((): any => {
+            return {
+                score: 1
+            }
+        })
+        jest.spyOn(recommendationRepository, "remove").mockImplementationOnce((): any => { })
+        await recommendationService.downvote(1);
+
+        expect(recommendationRepository.updateScore).toBeCalled();
+        expect(recommendationRepository.remove).not.toBeCalled();
+    })
+
+    it("Should call remove functinos", async () => {
+        jest.spyOn(recommendationRepository, "updateScore").mockImplementationOnce((): any => {
+            return {
+                score: -6
+            }
+        })
+        jest.spyOn(recommendationRepository, "remove").mockImplementationOnce((): any => { })
+        await recommendationService.downvote(1);
+
+        expect(recommendationRepository.remove).toBeCalled();
+    })
+
+})
+
+describe("DOWNVOTE", () => {
+    it("Should call update score, but not remove", async () => {
     })
 })
