@@ -80,7 +80,55 @@ describe("DOWNVOTE", () => {
 
 })
 
-describe("DOWNVOTE", () => {
-    it("Should call update score, but not remove", async () => {
+describe("GET_BY_ID_OR_FAIL", () => {
+    it("Should find a recomendation", async () => {
+        const recomendation = {
+            "name": "Adele - I Drink Wine (Live at The BRIT Awards 2022)",
+            "youtubeLink": "https://youtu.be/LwXQ7WUh-D0?list=RDGMEMQ1dJ7wXfLlqCjwV0xfSNbAVMLwXQ7WUh-D0"
+        }
+        jest.spyOn(recommendationRepository, "find").mockImplementationOnce((): any => {
+            return recomendation
+        })
+
+        const result = await recommendationService.getById(1);
+        expect(recommendationRepository.find).toBeCalled();
+        expect(result).toBe(recomendation)
+    })
+
+    it("given a not foundable user, should throw an error", async () => {
+        jest.spyOn(recommendationRepository, "find").mockImplementationOnce((): any => {
+            return false
+        })
+
+        const promise = recommendationService.getById(1)
+
+        expect(promise).rejects.toEqual({ "type": "not_found", "message": "" });
+    })
+
+
+
+})
+
+
+
+
+
+describe("GET", () => {
+    it("Should find all recomendations", async () => {
+        const recomendation = [{
+            "name": "Adele - I Drink Wine (Live at The BRIT Awards 2022)",
+            "youtubeLink": "https://youtu.be/LwXQ7WUh-D0?list=RDGMEMQ1dJ7wXfLlqCjwV0xfSNbAVMLwXQ7WUh-D0"
+        },{
+            "name": "Tom Odell - Can't Pretend (at Dean Street Studios)",
+            "youtubeLink": "https://youtu.be/B4-OxOmsqR0?list=RDB4-OxOmsqR0"
+        }
+        ]
+        jest.spyOn(recommendationRepository, "findAll").mockImplementationOnce((): any => {
+            return recomendation
+        })
+
+        const result = await recommendationService.get();
+        expect(result).toBe(recomendation)
+
     })
 })
