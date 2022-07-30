@@ -118,7 +118,7 @@ describe("GET", () => {
         const recomendation = [{
             "name": "Adele - I Drink Wine (Live at The BRIT Awards 2022)",
             "youtubeLink": "https://youtu.be/LwXQ7WUh-D0?list=RDGMEMQ1dJ7wXfLlqCjwV0xfSNbAVMLwXQ7WUh-D0"
-        },{
+        }, {
             "name": "Tom Odell - Can't Pretend (at Dean Street Studios)",
             "youtubeLink": "https://youtu.be/B4-OxOmsqR0?list=RDB4-OxOmsqR0"
         }
@@ -131,4 +131,33 @@ describe("GET", () => {
         expect(result).toBe(recomendation)
 
     })
+})
+
+describe("GET_TOP", () => {
+    it("Should find recomendations until the limit", async () => {
+        const allRecommendations = [{
+            "name": "Adele - I Drink Wine (Live at The BRIT Awards 2022)",
+            "youtubeLink": "https://youtu.be/LwXQ7WUh-D0?list=RDGMEMQ1dJ7wXfLlqCjwV0xfSNbAVMLwXQ7WUh-D0"
+        }, {
+            "name": "Tom Odell - Can't Pretend (at Dean Street Studios)",
+            "youtubeLink": "https://youtu.be/B4-OxOmsqR0?list=RDB4-OxOmsqR0"
+        }, {
+            "name": "Kate Bush - Running Up That Hill - Official Music Video",
+            "youtubeLink": "https://youtu.be/wp43OdtAAkM?list=RDB4-OxOmsqR0"
+        }, {
+            "name": "Stromae - Fils de joie (Official Music Video)",
+            "youtubeLink": "https://youtu.be/M7Z2tgJo8Hg?list=RDB4-OxOmsqR0"
+        }
+        ]
+
+        const limit = Math.floor(Math.random() * allRecommendations.length)
+        jest.spyOn(recommendationRepository, "getAmountByScore").mockImplementationOnce((): any => {
+            return allRecommendations
+        })
+        const result = await recommendationService.getTop(limit);
+        expect(result).toBe(allRecommendations)
+    })
+
+
+
 })
