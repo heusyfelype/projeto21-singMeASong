@@ -51,15 +51,20 @@ async function getTop(amount: number) {
 async function getRandom() {
   const random = Math.random();
   const scoreFilter = getScoreFilter(random);
+  console.log("********************* _______________ *************************")
+  console.log("random: ", random, " scoreFilter: ", scoreFilter)
 
   const recommendations = await getByScore(scoreFilter);
-  console.log("recomendations[0]:::::::::::::::::::: ", recommendations)
+  console.log("********************* _______________ *************************")
+  console.log("recommendation: ", recommendations)
+
+
   if (recommendations.length === 0) {
     throw notFoundError();
   }
 
   const randomIndex = Math.floor(Math.random() * recommendations.length);
-  console.log("randomIndex::::::::::::::: " , randomIndex)
+  console.log("REANDOM INDEX::::::::::::: ", randomIndex)
   return recommendations[randomIndex];
 }
 

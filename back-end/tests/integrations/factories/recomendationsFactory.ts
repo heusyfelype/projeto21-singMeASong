@@ -41,3 +41,17 @@ export const arrCreateRecommendations = [{
 export async function createAllRecommendations() {
     return await prisma.recommendation.createMany({ data: arrCreateRecommendations })
 }
+
+export async function createWithScore() {
+
+    for (let i = 0; i < arrCreateRecommendations.length; i++) {
+        await prisma.recommendation.create({
+            data: {
+                name: arrCreateRecommendations[i].name,
+                youtubeLink: arrCreateRecommendations[i].youtubeLink,
+                score: i + 5
+            }
+        })
+    }
+
+}
