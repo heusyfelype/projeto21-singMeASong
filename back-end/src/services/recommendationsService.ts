@@ -53,11 +53,13 @@ async function getRandom() {
   const scoreFilter = getScoreFilter(random);
 
   const recommendations = await getByScore(scoreFilter);
+  console.log("recomendations[0]:::::::::::::::::::: ", recommendations)
   if (recommendations.length === 0) {
     throw notFoundError();
   }
 
   const randomIndex = Math.floor(Math.random() * recommendations.length);
+  console.log("randomIndex::::::::::::::: " , randomIndex)
   return recommendations[randomIndex];
 }
 

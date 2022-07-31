@@ -9,6 +9,9 @@ describe("INSERT recomendation", () => {
             name: "string",
             youtubeLink: "string2"
         }
+        jest.spyOn(recommendationRepository, "findByName").mockImplementationOnce((createInfos): any => {
+            return false
+        })
         jest.spyOn(recommendationRepository, "create").mockImplementationOnce((createInfos): any => {
             return {
                 name: "string",
@@ -54,6 +57,9 @@ describe("UPVOTE", () => {
 
 describe("DOWNVOTE", () => {
     it("Should call update score, but not remove", async () => {
+        jest.spyOn(recommendationRepository, "find").mockImplementationOnce((): any => {
+            return true
+        })
         jest.spyOn(recommendationRepository, "updateScore").mockImplementationOnce((): any => {
             return {
                 score: 1
@@ -67,6 +73,9 @@ describe("DOWNVOTE", () => {
     })
 
     it("Should call remove functinos", async () => {
+        jest.spyOn(recommendationRepository, "find").mockImplementationOnce((): any => {
+            return true
+        })
         jest.spyOn(recommendationRepository, "updateScore").mockImplementationOnce((): any => {
             return {
                 score: -6
@@ -158,6 +167,48 @@ describe("GET_TOP", () => {
         expect(result).toBe(allRecommendations)
     })
 
+})
 
+describe("GET_RAMDOM", () => {
+    it("Should find a random recomendation", async () => {
+        const allRecommendations = [{
+            id: 1,
+            name: "Adele - I Drink Wine (Live at The BRIT Awards 2022)",
+            youtubeLink: "https://youtu.be/LwXQ7WUh-D0?list=RDGMEMQ1dJ7wXfLlqCjwV0xfSNbAVMLwXQ7WUh-D0",
+            score: 11,
+        }]
+
+        jest.spyOn(global.Math, "random").mockImplementationOnce((): any => {
+            return 0.5;
+        })
+        jest.spyOn(recommendationRepository, "findAll").mockImplementation((): any => {
+            return [allRecommendations[0]];
+        })
+        jest.spyOn(global.Math, "floor").mockImplementationOnce((): any => {
+            return 0;
+        })
+        const result = await recommendationService.getRandom();
+        expect(result).toBe(allRecommendations[0])
+    })
+    it("Should throw an error instead random recomendation", async () => {
+        const allRecommendations = [{
+            id: 1,
+            name: "Adele - I Drink Wine (Live at The BRIT Awards 2022)",
+            youtubeLink: "https://youtu.be/LwXQ7WUh-D0?list=RDGMEMQ1dJ7wXfLlqCjwV0xfSNbAVMLwXQ7WUh-D0",
+            score: 9,
+        }]
+
+        jest.spyOn(global.Math, "random").mockImplementationOnce((): any => {
+            return 0.9;
+        })
+        jest.spyOn(recommendationRepository, "findAll").mockImplementation((): any => {
+            return [];
+        })
+        jest.spyOn(global.Math, "floor").mockImplementationOnce((): any => {
+            return 0;
+        })
+        const result = recommendationService.getRandom();
+        expect(result).rejects.toEqual({"type": "not_found", 'message': '' })
+    })
 
 })
