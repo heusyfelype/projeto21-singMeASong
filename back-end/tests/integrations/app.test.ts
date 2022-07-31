@@ -53,4 +53,46 @@ describe("GET /random", () => {
 
         expect(response.body.name).toBe(factory.arrCreateRecommendations[1].name)
     })
+
+    it("if database is empty, it should return not_found", async () => {
+        const response = await supertest(app).get("/recommendations/random")
+        expect(response.status).toBe(404)
+    })
 })
+
+describe("GET top with AMOUNT", () => {
+    const amount = 5;
+    it("It should return the top songs", async () => {
+        await factory.createWithScore();
+        const response = await supertest(app).get(`/recommendations/top/${amount}`);
+        expect(response.body).toHaveLength(amount)
+    })
+    it("Given a incorrect params, it should return error", async () => {
+        await factory.createWithScore();
+        const response = await supertest(app).get(`/recommendations/top/XXX`);
+        expect(response.status).toBe(500)
+    })
+})
+
+describe("GET with param id", () => {
+    it("Given a valid id, it should return the correct song", async () => {
+        await factory.createWithScore();
+        const id = factory.idOfSongs[5]
+        const response = await supertest(app).get(`/recommendations/${id}`);
+        expect(response.body.id).toBe(id)
+    })
+    it("Given a invalid id, it should return 404 error", async () => {
+        const response = await supertest(app).get(`/recommendations/-1`);
+        expect(response.status).toBe(404)
+    })
+})
+
+// describe("POST UPVOTE", () => {
+//     it("Given a valid id, it should return the correct song", async () => {
+//         await factory.createWithScore();
+//         const id = factory.idOfSongs[5]
+//         const response = await supertest(app).get(`/recommendations/${id}`);
+//         expect(response.body.id).toBe(id)
+//     })
+    
+// })
