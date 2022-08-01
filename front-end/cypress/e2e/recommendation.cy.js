@@ -84,11 +84,47 @@ const URL = "http://localhost:3000/";
 
 // })
 
-describe("TOP", () => {
-    it("clicking in 'top', it should redirect to /top", () => {
+// describe("TOP", () => {
+//     it("clicking in 'top', it should redirect to /top", () => {
+//         cy.visit(`${URL}`);
+//         cy.get("#menuItem-top").click()
+//         cy.url().should("contain", "top")
+//     })
+
+//     it("votin in some videos, it should reorde them by upvotes", () => {
+//         const toCreateRecommendations = [{
+//             name: faker.name.findName(),
+//             link: "https://youtu.be/fe4EK4HSPkI"
+//         }, {
+//             name: faker.name.findName(),
+//             link: "https://youtu.be/fe4EK4HSPkI"
+//         }, {
+//             name: faker.name.findName(),
+//             link: "https://youtu.be/fe4EK4HSPkI"
+//         }]
+
+//         cy.visit(`${URL}`);
+//         cy.deleteAllDB();
+//         for (let each of toCreateRecommendations) {
+//             cy.createRecommendations(each)
+//         }
+//         cy.get("#menuItem-top").click();
+
+//         cy.contains(`${toCreateRecommendations[1].name}`).get("#grow-up").click()
+//         cy.contains(`${toCreateRecommendations[1].name}`).get("#grow-up").click()
+//         cy.contains(`${toCreateRecommendations[2].name}`).get("#grow-up").click()
+//         cy.get("#root article").eq(0).get("div").should("contain", toCreateRecommendations[1].name)
+//         cy.get("#root article").eq(1).get("div").should("contain", toCreateRecommendations[2].name)
+
+//     })
+
+// })
+
+describe("random", () => {
+    it("clicking in 'random', it should redirect to /random", () => {
         cy.visit(`${URL}`);
-        cy.get("#menuItem-top").click()
-        cy.url().should("contain", "top")
+        cy.get("#menuItem-random").click()
+        cy.url().should("contain", "random")
     })
 
     it("votin in some videos, it should reorde them by upvotes", () => {
@@ -108,14 +144,8 @@ describe("TOP", () => {
         for (let each of toCreateRecommendations) {
             cy.createRecommendations(each)
         }
+        cy.get("#menuItem-random").click();
+        cy.get("#root article").should("have.length", 1)
 
-        cy.contains(`${toCreateRecommendations[1].name}`).get("#grow-up").click()
-        cy.contains(`${toCreateRecommendations[1].name}`).get("#grow-up").click()
-        cy.contains(`${toCreateRecommendations[2].name}`).get("#grow-up").click()
-        cy.get("#root article").eq(0).get("div").should("contain", toCreateRecommendations[1].name)
-        cy.get("#root article").eq(1).get("div").should("contain", toCreateRecommendations[2].name)
-
-        // cy.get("#root article").eq(1).should("contain", toCreateRecommendations[2].name)
     })
-
 })
