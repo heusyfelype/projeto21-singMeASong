@@ -15,7 +15,7 @@ export default function Menu() {
         Home
       </MenuItem>
 
-      <MenuItem onClick={() => navigate("/top")}>
+      <MenuItem id="menuItem-top" onClick={() => navigate("/top")}>
         <HiTrendingUp />
         Top
       </MenuItem>
