@@ -13,6 +13,7 @@ app.use(express.json());
 
 app.use("/recommendations", recommendationRouter);
 if (process.env.MODE === "TEST") {
+    console.log(".........:::::::::: TESTS DATABASE RUNNING ::::::::::.........")
     app.use("/recommendations", e2eTestRouter)
 }
 app.use(errorHandlerMiddleware);

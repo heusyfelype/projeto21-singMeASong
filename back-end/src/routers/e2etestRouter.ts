@@ -4,6 +4,6 @@ import { deleteAllController } from "../controllers/deleteAllController.js";
 
 const e2eTestRouter = Router()
 
-e2eTestRouter.post("/deleteAll", deleteAllController)
+e2eTestRouter.delete("/deleteAll", deleteAllController)
 
 export default e2eTestRouter;
