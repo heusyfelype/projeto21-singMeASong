@@ -6,17 +6,17 @@ export const arrCreateRecommendations = [{
     "name": "Rammstein - Deutschland (Official Video)",
     "youtubeLink": "https://youtu.be/NeQM1c-XCDc"
 }, {
-    "name": "Adele - I Drink Wine (Live at The BRIT Awards 2022)",
-    "youtubeLink": "https://youtu.be/LwXQ7WUh-D0?list=RDGMEMQ1dJ7wXfLlqCjwV0xfSNbAVMLwXQ7WUh-D0"
+    "name": "ZAYN - Dusk Till Dawn (Official Video) ft. Sia",
+    "youtubeLink": "https://youtu.be/tt2k8PGm-TI?list=RDGMEMQ1dJ7wXfLlqCjwV0xfSNbAVMLwXQ7WUh-D0"
 }, {
     "name": "Daft Punk - Instant Crush (Video) ft. Julian Casablancas",
-    "youtubeLink": "https://youtu.be/a5uQMwRMHcs?list=RDB4-OxOmsqR0"
+    "youtubeLink": "https://youtu.be/a5uQMwRMHcs"
 }, {
     "name": "Stromae - Fils de joie (Official Music Video)",
-    "youtubeLink": "https://youtu.be/M7Z2tgJo8Hg?list=RDB4-OxOmsqR0"
+    "youtubeLink": "https://youtu.be/M7Z2tgJo8Hg"
 }, {
     "name": "MGMT - Kids (Official HD Video)",
-    "youtubeLink": "https://youtu.be/fe4EK4HSPkI?list=RDB4-OxOmsqR0"
+    "youtubeLink": "https://youtu.be/fe4EK4HSPkI"
 }, {
     "name": "M83 - 'Wait' (Official Video)",
     "youtubeLink": "https://youtu.be/lAwYodrBr2Q"
@@ -34,7 +34,7 @@ export const arrCreateRecommendations = [{
     "youtubeLink": "https://youtu.be/Ek0SgwWmF9w"
 }, {
     "name": "Empire Of The Sun - Way To Go (Official Video)",
-    "youtubeLink": "https://youtu.be/xg9ebVTL9yE?list=RDMM"
+    "youtubeLink": "https://youtu.be/xg9ebVTL9yE"
 }
 ]
 
@@ -43,9 +43,9 @@ export async function createAllRecommendations() {
     return await prisma.recommendation.createMany({ data: arrCreateRecommendations })
 }
 
-export let idOfSongs = []
+export let insertedSongs = []
 export async function createWithScore() {
-    idOfSongs = []
+    insertedSongs = []
     for (let i = 0; i < arrCreateRecommendations.length; i++) {
         const song = await prisma.recommendation.create({
             data: {
@@ -54,7 +54,7 @@ export async function createWithScore() {
                 score: i + 5
             }
         })
-        idOfSongs.push(song.id)
+        insertedSongs.push(song)
     }
 
 }

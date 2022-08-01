@@ -77,7 +77,7 @@ describe("GET top with AMOUNT", () => {
 describe("GET with param id", () => {
     it("Given a valid id, it should return the correct song", async () => {
         await factory.createWithScore();
-        const id = factory.idOfSongs[5]
+        const id = factory.insertedSongs[5].id
         const response = await supertest(app).get(`/recommendations/${id}`);
         expect(response.body.id).toBe(id)
     })
@@ -87,12 +87,39 @@ describe("GET with param id", () => {
     })
 })
 
-// describe("POST UPVOTE", () => {
-//     it("Given a valid id, it should return the correct song", async () => {
-//         await factory.createWithScore();
-//         const id = factory.idOfSongs[5]
-//         const response = await supertest(app).get(`/recommendations/${id}`);
-//         expect(response.body.id).toBe(id)
-//     })
-    
-// })
+describe("POST UPVOTE", () => {
+    it("Given a valid id, it should update vote", async () => {
+        await factory.createWithScore();
+        const id = factory.insertedSongs[6].id;
+        const score = factory.insertedSongs[6].score
+        const upvote = await supertest(app).post(`/recommendations/${id}/upvote`);
+        const response = await supertest(app).get(`/recommendations/${id}`);
+        expect(response.body.score).toBe(score + 1)
+        expect(upvote.status).toBe(200)
+    })
+
+})
+
+describe("POST DOWNVOTE", () => {
+    it("Given a valid id, it should update vote", async () => {
+        await factory.createWithScore();
+        const id = factory.insertedSongs[6].id;
+        const score = factory.insertedSongs[6].score
+        const downvote = await supertest(app).post(`/recommendations/${id}/downvote`);
+        const response = await supertest(app).get(`/recommendations/${id}`);
+        expect(response.body.score).toBe(score - 1)
+        expect(downvote.status).toBe(200)
+    })
+
+    it("should exclude a song if the score < -5", async () => {
+        await factory.createWithScore();
+        const id = factory.insertedSongs[0].id;
+        const score = factory.insertedSongs[0].score
+        for (let i = 0; i <= 10; i++) {
+            await supertest(app).post(`/recommendations/${id}/downvote`);
+        }
+        const response = await supertest(app).get(`/recommendations/${id}`);
+        expect(response.status).toBe(404)
+    })
+
+})
